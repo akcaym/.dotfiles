@@ -1,0 +1,10 @@
+configuration {
+ modi: "window,run,drun,ssh,combi";
+ //font: "JetBrainsMono Nerd Font 10";
+ combi-modi: "window,drun,ssh";
+ show-icons: true;
+ display-drun: "Programs:";
+ display-window: "Windows:";
+ }
+@theme "~/.config/rofi/themes/dt-center.rasi"
+
