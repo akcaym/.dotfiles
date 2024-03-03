@@ -7,7 +7,7 @@
 
 
 format = """
-$battery $time $username[@](surface2)$hostname $directory $git_branch$git_state$git_status $cmd_duration
+$battery $time $username[@](surface2)$hostname $directory $git_branch$git_state$git_status $python $cmd_duration 
 $character
 """
 

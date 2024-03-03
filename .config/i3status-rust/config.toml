@@ -3,34 +3,55 @@ icons_format = "{icon}"
 [theme]
 theme = "ctp-mocha"
 [theme.overrides]
-#idle_bg = "#0000ff"
-#idle_fg = "#00ff00"
+#idle_bg = "#181825"
+idle_bg = "#11111b"
+idle_fg = "#6c7086"
+info_bg = "#89b4fa"
+info_fg = "#1e1e2e"
+good_bg = "#a6e3a1"
+good_fg = "#1e1e2e"
+warning_bg = "#f9e2af"
+warning_fg = "#1e1e2e"
+critical_bg = "#f38ba8"
+critical_fg = "#1e1e2e"
+#separator = "\ue0b2"
+separator = " | "
+separator_bg = "#11111b"
+separator_fg = "#F5E0DC"
 
 [icons]
 icons = "awesome4"
 [icons.overrides]
-bat = ["|E|", "|_|", "|=|", "|F|"]
-bat_charging = "|^| "
+#bat = ["|E|", "|_|", "|=|", "|F|"]
+bat = ["", "", "", ""]
+bat_charging = "󰄌"
+
+[[block]]
+block = "custom"
+command = "btrfs fi usage / 2>/dev/null | sed -n '7p' | cut -f 4"
+format = " $text.pango-str() "
+interval = "once"
 
 [[block]]
 block = "amd_gpu"
-format = " $icon $utilization "
-format_alt = "$icon MEM: $vram_used_percents ($vram_used/$vram_total) "
+format = "amd:{$utilization}"
+format_alt = "amd:$vram_used_percents ($vram_used/$vram_total) "
+interval = 1
+[block.theme_overrides]
+#idle_fg = "#EA999C"
+
+[[block]]
+block = "nvidia_gpu"
+format = "nv:$memory $utilization $temperature $clocks $fan_speed $power"
 interval = 1
 
 [[block]]
-block = "external_ip"
-format = " $ip "
-interval = 300
-
-#[[block]]
-#block = "cpu"
-#[block.theme_overrides]
-#idle_bg = "#0000ff"
-#idle_fg = "#00ff00"
-#[block.icons_overrides]
-#cpu_boost_on = "ON"
-#cpu_boost_off = "OFF"
+block = "cpu"
+format = "$icon $utilization"
+format_alt = "$icon $frequency{ $boost|}"
+interval = 1
+[block.theme_overrides]
+idle_fg = "#E5C890"
 
 #[[block]]
 #block = "disk_space"
@@ -44,27 +65,82 @@ interval = 300
 
 [[block]]
 block = "memory"
-#format = " $icon $mem_total_used_percents.eng(w:2) "
+format = "mem:$mem_used_percents.eng(w:2)"
+format_alt = "mem:$mem_used.eng(prefix:Mi)/$mem_total.eng(prefix:Mi)($mem_used_percents.eng(w:2)) "
 #format_alt = " $icon_swap $swap_used_percents.eng(w:2) "
-#format = "$icon"
+warning_mem = 50
+critical_mem = 90
 interval = 5
+[block.theme_overrides]
+idle_fg = "#E5C890"
+
 
 [[block]]
 block = "net"
-#format = " $icon {$signal_strength $ssid $frequency|Wired connection} via $device "
-format = " $icon {$signal_strength} "
+device = "wlp3s0"
+#format = "$speed_down $speed_up $icon {$signal_strength}"
+format = "net:$speed_down{\\|}$speed_up"
+interval = 2
+[[block.click]]
+button = "right"
+cmd = "xxxxxx | rofi -show run"
+#cmd = "~/.config/i3status-rust/scripts/get_extip.shxxx"
 
 [[block]]
 block = "sound"
+show_volume_when_muted = true
+headphones_indicator = true
 [[block.click]]
 button = "left"
 cmd = "pavucontrol"
 
+#[[block]]
+#block = "custom"
+#command = "xrandr --listmonitors | tail -n+2 | tr '+' ' ' | cut -d' ' -f 4 | tr '\n' ' '"
+#interval = "once"
+#signal = 4
+
 [[block]]
-block = "battery"
-format = " $icon $percentage "
-interval = 60
-critical = 20
+block = "dnf"
+interval = 3600
+format = "  $count.eng(w:1) "
+format_singular = " $icon One update available "
+format_up_to_date = " $count.eng(w:1)"
+critical_updates_regex = "(linux|linux-lts|linux-zen)"
+[[block.click]]
+# shows dmenu with cached available updates. Any dmenu alternative should also work.
+button = "left"
+cmd = "dnf list -q --upgrades | tail -n +2 | rofi -dmenu"
+[block.theme_overrides]
+info_bg = "#11111b"
+info_fg = "#E78284"
+
+[[block]]
+block = "hueshift"
+hue_shifter = "redshift"
+format= "$temperature{K}"
+step = 100
+click_temp = 3500
+
+#[[block]]
+#block = "battery"
+#format = " $icon  $percentage "
+#full_format = "$icon  "
+#driver = "upower"
+#interval = 60
+#full_threshold = 95
+#info = 60
+#good = 60
+#warning = 20
+#critical = 10
+#empty_threshold = 5
+#[block.theme_overrides]
+#idle_fg = "#A6D189"
+##info_fg = "#A6D189"
+##info_bg = "#11111b"
+##good_fg = "#A6D189"
+##good_bg = "#11111b"
+
 
 #[[block]]
 #block = "notify"
@@ -81,4 +157,19 @@ block = "time"
 interval = 5
 format = " $timestamp.datetime(f:'%Y-%m-%d %R') "
 
+#[[block]]
+#block = "custom"
+#command = "echo \uf011" # assumes fontawesome icons
+#interval = "once"
+#[[block.click]]
+#button = "left"
+#cmd = "systemctl `echo -e 'suspend\npoweroff\nreboot' | dmenu`"
+
+#[[block]]
+#block = "custom"
+#cycle = ["echo ON", "echo OFF"]
+#interval = "once"
+#[[block.click]]
+#button = "left"
+#action = "cycle"
 

@@ -61,7 +61,7 @@ exec --no-startup-id dex-autostart --autostart --environment i3
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+#exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -79,6 +79,8 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 floating_modifier $mod
 
 mouse_warping none
+focus_follows_mouse no
+
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -88,34 +90,36 @@ bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 # target                 title     bg    text   indicator  border
-client.focused           $lavender $base $text  $rosewater $lavender
-client.focused_inactive  $overlay0 $base $text  $rosewater $overlay0
-client.unfocused         $overlay0 $base $text  $rosewater $overlay0
-client.urgent            $peach    $base $peach $overlay0  $peach
-client.placeholder       $overlay0 $base $text  $overlay0  $overlay0
-client.background        $base
+client.focused           $lavender $crust $text  $rosewater $lavender
+client.focused_inactive  $overlay0 $crust $text  $rosewater $overlay0
+client.unfocused         $overlay0 $crust $text  $rosewater $overlay0
+client.urgent            $peach    $crust $peach $overlay0  $peach
+client.placeholder       $overlay0 $crust $text  $overlay0  $overlay0
+client.background        $crust
 
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
   colors {
-      background         $base
+      background         $crust
       statusline         $text
       focused_statusline $text
-      focused_separator  $base
+      focused_separator  #ff0000
       #                  border  bg text
-      focused_workspace  $base $base $green
-      active_workspace   $base $base $blue
-      inactive_workspace $base $base $surface1
-      urgent_workspace   $base $red $surface1
-      binding_mode       $base $base $surface1
+      focused_workspace  $crust $crust $green
+      active_workspace   $crust $crust $blue
+      inactive_workspace $crust $crust $surface1
+      urgent_workspace   $crust $red $surface1
+      binding_mode       $crust $crust $surface1
   }
-  #status_command i3status
+  workspace_min_width 30
+  #strip_workspace_numbers no
+  #workspace_buttons no
+  separator_symbol ":|:"
   #i3bar_command i3bar --transparency
-  #tray_output primary
+  tray_output primary
 
-  #status_command SCRIPT_DIR=~/.config/i3blocks/scripts i3blocks 
   status_command i3status-rs ~/.config/i3status-rust/config.toml
 
 }
