@@ -5,6 +5,20 @@ configuration {
  show-icons: true;
  display-drun: "Programs:";
  display-window: "Windows:";
+ filebrowser {
+      /** Directory the file browser starts in. */
+      directory: "/home/akcaym/Downloads";
+      /**
+        * Sorting method. Can be set to:
+        *   - "name"
+        *   - "mtime" (modification time)
+        *   - "atime" (access time)
+        *   - "ctime" (change time)
+        */
+      sorting-method: "name";
+      /** Group directories before files. */
+      directories-first: true;
+   }
  }
 @theme "~/.config/rofi/themes/dt-center.rasi"
 
