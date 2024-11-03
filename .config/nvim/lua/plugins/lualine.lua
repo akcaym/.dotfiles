@@ -46,6 +46,32 @@ return {
                 c = { bg = colors.inactive_bg, fg = colors.semilightgray },
             },
         }
+        -- local function hello()
+        --     return [[hello world]]
+        -- end
+        local function get_venv(variable)
+            local venv = os.getenv(variable)
+            if venv ~= nil and string.find(venv, "/") then
+                local orig_venv = venv
+                for w in orig_venv:gmatch("([^/]+)") do
+                    venv = w
+                end
+                venv = string.format("%s", venv)
+            end
+            return venv
+        end
+
+        local function has_env()
+            local venv = get_venv("CONDA_DEFAULT_ENV") or get_venv("VIRTUAL_ENV")
+            if venv ~= nil then
+                return true
+            end
+            return false
+        end
+        local function print_env()
+            return get_venv("CONDA_DEFAULT_ENV") or get_venv("VIRTUAL_ENV") or "NO ENV"
+        end
+
         require("lualine").setup({
             options = {
                 theme = my_lualine_theme,
@@ -55,7 +81,9 @@ return {
                     "mode",
                 },
                 lualine_b = { "branch", "diff", "diagnostics" },
-                lualine_c = { { "filename", path = 1 } },
+                lualine_c = {
+                    { "filename", path = 1 },
+                },
                 lualine_x = {
                     --{ "fileformat", "filetype" },
                     { "searchcount" },
@@ -64,6 +92,11 @@ return {
                         cond = lazy_status.has_updates,
                         --require("noice").api.statusline.mode.get,
                         --cond = require("noice").api.statusline.mode.has,
+                        color = { fg = "#ff9e64" },
+                    },
+                    {
+                        print_env,
+                        cond = has_env,
                         color = { fg = "#ff9e64" },
                     },
                 },
@@ -79,6 +112,7 @@ return {
                 "nvim-dap-ui",
                 "oil",
                 "trouble",
+                "neo-tree",
             },
         })
     end,
